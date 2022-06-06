@@ -34,31 +34,44 @@
                         <h2 id="fenWaitDisplay">Waiting for your fen...
                         </h2>
                         <h2 class = "position-absolute" id="grayScore"
-                         style="color:black; top:-50%; transform: translateY(50%); left:-130px;">Gray: 0</h2>
+                         style="color:#c2c2c2; top:-50%; transform: translateY(50%); left:-130px;">Gray: 0</h2>
                         <h2 class = "position-absolute" id="pinkScore"
-                         style="color:black; top:-50%; transform: translateY(50%); right:-130px;">Pink: 0</h2>
+                         style="color:violet; top:-50%; transform: translateY(50%); right:-130px;">Pink: 0</h2>
                     </div>
                     <canvas id="canvas">
                     </canvas>
                 </div>
             </div>
 
-            <div class="h-100 w-100 d-flex align-items-center justify-content-center position-absolute d-none" id="tempScreen" style="top:0;left:0;">
-                <div id="tempScreen__layout" class="h-100 w-100 position-absolute" 
+            <div class="h-100 w-100 d-flex align-items-center justify-content-center position-absolute d-none" id="playAgainScreen" 
+            style="top:0;left:0;">
+                <div  class="h-100 w-100 position-absolute" 
                 style="top:0;bottom:0;left:0;right:0; background-color: rgb(0, 0, 0); opacity:0.1"
                 ></div>
                 <div class="card w-20" style="width: 18rem; box-shadow:0 10px 10px #ccc;">
                     <div class="card-body d-flex flex-column align-items-center justify-content-center">
                         <h5 class="card-title">Want to play again?</h5>
-                        <h6 class="card-subtitle mb-3  text-muted">Choose your answer</h6>
-                        <div id="tempScreenButton" class="w-100 d-flex align-items-center justify-content-around">
-                            <button class="btn btn-success">
+                        <h6 class="card-subtitle mb-3  text-muted" id="playAgainScreenContent">Choose your answer</h6>
+                        <div class="w-100 d-flex align-items-center justify-content-around">
+                            <button class="btn btn-success" id="playAgainButton">
                                 Play Again
                             </button>
-                            <button class="btn btn-danger">
+                            <button class="btn btn-danger" id="menuButton">
                                 Menu
                             </button>
                         </div>
+                    </div>
+              </div>
+            </div>
+
+            <div class="h-100 w-100 d-flex align-items-center justify-content-center position-absolute d-none" id="waitingForAnswerScreen" 
+            style="top:0;left:0;">
+                <div class="h-100 w-100 position-absolute" 
+                style="top:0;bottom:0;left:0;right:0; background-color: rgb(0, 0, 0); opacity:0.1"
+                ></div>
+                <div class="card w-20" style="width: 18rem; box-shadow:0 10px 10px #ccc;">
+                    <div class="card-body d-flex flex-column align-items-center justify-content-center">
+                        <h5 class="card-title">Waiting for your fen's answer...</h5>
                     </div>
               </div>
             </div>

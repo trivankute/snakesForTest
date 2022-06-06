@@ -2,8 +2,8 @@ const BG_COLOR = '#231f20'
 const SNAKE_COLOR = '#c2c2c2'
 const FOOD_COLOR = '#e66916'
 
-const socket = io("https://snakefortesting.herokuapp.com/")
-// const socket = io("http://localhost:3000")
+// const socket = io("https://snakefortesting.herokuapp.com/")
+const socket = io("http://localhost:3000")
 socket.on('init',handleInit)
 socket.on('gameState',handleGameState)
 socket.on('gameOver',handleGameOver)
@@ -11,6 +11,10 @@ socket.on('gameCode',handleGameCode)
 socket.on('unknownCode',handleUnknownCode)
 socket.on('tooManyPlayers',handleTooManyPlayers)
 socket.on('fenWaitHandle',fenWaitHandle)
+socket.on('afterGame',handleAfterGame)
+socket.on('afterFirstAnswerForAnother',handleAfterFirstAnswerForAnother)
+socket.on('afterFirstAnswerForQuit',handleAfterFirstAnswerForQuit)
+
 
 let canvas, ctx;
 let playerNumber;
@@ -25,9 +29,17 @@ const gameCodeDisplay =document.getElementById('gameCodeDisplay')
 const fenWaitDisplay =document.getElementById('fenWaitDisplay')
 const grayScore =document.getElementById('grayScore')
 const pinkScore =document.getElementById('pinkScore')
+const playAgainScreen =document.getElementById('playAgainScreen')
+const playAgainButton =document.getElementById('playAgainButton')
+const playAgainScreenContent =document.getElementById('playAgainScreenContent')
+const menuButton =document.getElementById('menuButton')
+const waitingForAnswerScreen =document.getElementById('waitingForAnswerScreen')
 
 newGameBtn.addEventListener('click',newGame)
 joinGameBtn.addEventListener('click',joinGame)
+
+menuButton.addEventListener('click',handleMenuButtonEvent)
+playAgainButton.addEventListener('click',handlePlayAgainButtonEvent)
 
 function newGame()
 {
@@ -40,6 +52,61 @@ function joinGame()
     const code = gameCodeInput.value
     socket.emit('joinGame',code)
     init()
+}
+
+function handleAfterFirstAnswerForAnother(playOrNot)
+{
+    if(playOrNot)
+    playAgainScreenContent.textContent = "Your fen aldready accepted to play again"
+    else
+    {
+        playAgainScreenContent.textContent = "Your fen quited the game"
+        setTimeout(()=>{
+            reset()
+            playAgainScreen.classList.add('d-none')
+        },1000)
+    }
+}
+
+function handleAfterFirstAnswerForQuit()
+{
+    reset()
+    playAgainScreen.classList.add('d-none')
+}
+
+function handleAfterGame(data)
+{
+    if(data.playAgain)
+    {
+        reset()
+        waitingForAnswerScreen.classList.add('d-none')
+        gameCodeDisplay.textContent = data.roomName
+        init()
+    }
+    else
+    {
+        reset()
+        playAgainScreen.classList.add('d-none')
+        if(!waitingForAnswerScreen.classList.contains('d-none'))
+        {
+            waitingForAnswerScreen.classList.add('d-none')
+            alert('Your fen quited the room')
+        }
+    }
+}
+
+function handleMenuButtonEvent()
+{
+    const continueToPlay = false
+    socket.emit('afterGame',continueToPlay)
+}
+
+function handlePlayAgainButtonEvent()
+{
+    const continueToPlay = true
+    socket.emit('afterGame',continueToPlay)
+    playAgainScreen.classList.add('d-none')
+    waitingForAnswerScreen.classList.remove('d-none')
 }
 
 function init()
@@ -137,6 +204,7 @@ function handleGameOver(data)
             alert('Pink win')
         }
     }
+    playAgainScreen.classList.remove('d-none')
     gameActive=false;
 }
 function handleGameCode(gameCode)
@@ -170,8 +238,12 @@ function fenWaitHandle()
         else
         {
             fenWaitDisplay.textContent = "Starts:"
-            if(playerNumber===1) fenWaitDisplay.textContent += " Your snake is Gray"
-            else fenWaitDisplay.textContent += " Your snake is Pink"
+            if(playerNumber===1) {fenWaitDisplay.textContent += " Your snake is Gray"
+            fenWaitDisplay.style.color = '#c2c2c2'
+            }
+            else {fenWaitDisplay.textContent += " Your snake is Pink"
+            fenWaitDisplay.style.color = 'violet'
+            }
             clearInterval(timeCountDown)
         }
     },1000)
@@ -182,6 +254,8 @@ function reset()
     playerNumber = null
     gameCodeInput.value = ""
     gameCodeDisplay.innerText = ""
+    fenWaitDisplay.textContent = "Waiting for your fen..."
+    fenWaitDisplay.style.color = 'black'
     gameScreen.classList.remove('d-block')
     gameScreen.classList.add('d-none')
     initialScreen.classList.remove('d-none')
