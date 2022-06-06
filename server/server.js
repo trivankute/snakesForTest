@@ -44,11 +44,15 @@ io.on('connection',(client)=>{
       for(let i of room.values())
         if(i!==checkingForPlayAgain[roomName][0].id) anotherId = i
       if(playOrNot)
+      {
         io.sockets.to(anotherId).emit("afterFirstAnswerForAnother",playOrNot)
+      }
       else
       {
         io.sockets.to(anotherId).emit("afterFirstAnswerForAnother",playOrNot)
         io.sockets.to(checkingForPlayAgain[roomName][0].id).emit("afterFirstAnswerForQuit")
+        for(let i of room.values()) delete clientRooms[i]
+        delete checkingForPlayAgain[roomName]
       }
         
     }
