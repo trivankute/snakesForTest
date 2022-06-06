@@ -113,18 +113,14 @@ function handleGameOver(data)
     //     alert("You lose")
     if(data.state.players[0].score>data.state.players[1].score)
     {
-        if(data.winner === playerNumber)
+        if(playerNumber === 1)
         {
-            if(playerNumber === 1)
-                alert('Gray win')
-            else
-                alert('Pink win')
+            alert('Gray win')
         }
         else
-            if(playerNumber === 1)
-                alert('Gray lose')
-            else
-                alert('Pink lose')
+        {
+            alert('Pink lose')
+        }
     }
     else if(data.state.players[0].score===data.state.players[1].score)
     {
@@ -132,18 +128,14 @@ function handleGameOver(data)
     }
     else
     {
-        if(data.winner === playerNumber)
+        if(playerNumber === 1)
         {
-            if(playerNumber === 1)
-                alert('Gray win')
-            else
-                alert('Pink win')
+            alert('Gray lose')
         }
         else
-            if(playerNumber === 1)
-                alert('Gray lose')
-            else
-                alert('Pink lose')
+        {
+            alert('Pink win')
+        }
     }
     gameActive=false;
 }
