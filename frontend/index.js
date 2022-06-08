@@ -307,7 +307,7 @@ function fenWaitHandle()
 
 function reset()
 {
-    playerNumber = null
+    // playerNumber = null
     gameCodeInput.value = ""
     gameCodeDisplay.innerText = ""
     fenWaitDisplay.textContent = "Waiting for your fen..."
