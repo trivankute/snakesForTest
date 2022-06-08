@@ -8,7 +8,7 @@ const io = new socket_io.Server(httpServer, {
   },
 });
 
-const {initGame,gameLoop,getUpdatedVelocity} = require('./game.js')
+const {initGame,gameLoop,getUpdatedVelocity,timeUpdate} = require('./game.js')
 const {makeId} = require('./utils.js')
 const {FRAME_RATE} = require('./constants.js')
 
@@ -57,7 +57,7 @@ io.on('connection',(client)=>{
         
     }
 
-    if(checkingForPlayAgain[roomName].length===2)
+    else if(checkingForPlayAgain[roomName].length===2)
     {
       let playAgain = true;
       if(checkingForPlayAgain[roomName][0].play === false || checkingForPlayAgain[roomName][1].play === false)
@@ -143,6 +143,7 @@ io.on('connection',(client)=>{
 
 function startGameInterval(roomName)
 {
+  timeUpdate(state[roomName])
   const intervalId = setInterval(()=>{
     const winner = gameLoop(state[roomName])
     if(!winner)

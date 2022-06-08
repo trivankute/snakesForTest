@@ -30,6 +30,8 @@ function createGameState()
     ],
         food:{
         },
+        time:30
+        ,
         gridSize:GRID_SIZE
     }
 }
@@ -39,6 +41,12 @@ function gameLoop(state){
     {
         return
     }
+
+    if(state.time==-1)
+    {
+        return true;
+    }
+
     const playerOne = state.players[0]
     const playerTwo = state.players[1]
 
@@ -47,6 +55,7 @@ function gameLoop(state){
 
     playerTwo.pos.x += playerTwo.vel.x;
     playerTwo.pos.y += playerTwo.vel.y;
+
 
     if(playerOne.pos.x < 0 || playerOne.pos.x > GRID_SIZE ||
         playerOne.pos.y < 0 || playerOne.pos.y > GRID_SIZE)
@@ -106,6 +115,20 @@ function gameLoop(state){
     return false;
 }
 
+function timeUpdate(state)
+{
+    const interval = setInterval(()=>{
+        if(state.time>=0)
+        {
+            state.time--
+        }
+        else
+        {
+            clearInterval(interval);
+        }
+    },1000)
+}
+
 function randomFood(state)
 {
     food = {x:Math.floor(Math.random()*GRID_SIZE), y:Math.floor(Math.random()*GRID_SIZE)}
@@ -144,5 +167,6 @@ function initGame()
 module.exports = {
     initGame,
     gameLoop,
-    getUpdatedVelocity
+    getUpdatedVelocity,
+    timeUpdate
 }

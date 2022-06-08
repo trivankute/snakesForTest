@@ -27,16 +27,34 @@
 
             <div class="h-100 d-none" id="gameScreen">
                 <div class="d-flex flex-column align-items-center justify-content-center h-100 ">
-                    <h1>Your game code is:
+                    <!-- <h1 class="position-relative">Your game code is:
                         <span id="gameCodeDisplay"></span>
+                        <span  class="position-absolute" style="left:-200px;top:0;">
+                            Time: 0: <span id="timeDisplay" class="position-absolute"> 30</span>
+                        </span>
+                    </h1> -->
+                    <h1 class="d-flex align-items-center justify-content-center">Your game code is <span id="gameCodeDisplay" class="me-3"></span>
+                        <span >
+                            Time: 0:<span id="timeDisplay">30</span>
+                        </span>
                     </h1>
-                    <div class="position-relative" id="forScore">
+                    <div class="position-relative">
                         <h2 id="fenWaitDisplay">Waiting for your fen...
                         </h2>
                         <h2 class = "position-absolute" id="grayScore"
-                         style="color:#c2c2c2; top:-50%; transform: translateY(50%); left:-130px;">Gray: 0</h2>
+                         style="color:#c2c2c2; top:-50%; transform: translateY(50%); left:-120px;">Gray: 0</h2>
                         <h2 class = "position-absolute" id="pinkScore"
-                         style="color:violet; top:-50%; transform: translateY(50%); right:-130px;">Pink: 0</h2>
+                         style="color:violet; top:-50%; transform: translateY(50%); right:-120px;">Pink: 0</h2>
+                        <h2 class = "position-absolute" style="top:50px; left:-300px;">
+                            <span style="color:#c2c2c2;">Gray:</span>
+                            <span id="roundScoreForGray">0</span>
+                        </br>
+                        Round:<span id="roundCount">1</span>
+                        </h2>
+                        <h2 class = "position-absolute" style="top:50px; right:-300px;">
+                            <span style="color:violet;">Pink:</span>
+                            <span id="roundScoreForPink">0</span>
+                        </h2>
                     </div>
                     <canvas id="canvas">
                     </canvas>

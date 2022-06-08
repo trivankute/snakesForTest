@@ -4,6 +4,7 @@ const FOOD_COLOR = '#e66916'
 
 const socket = io("https://snakefortesting.herokuapp.com/")
 // const socket = io("http://localhost:3000")
+
 socket.on('init',handleInit)
 socket.on('gameState',handleGameState)
 socket.on('gameOver',handleGameOver)
@@ -34,6 +35,11 @@ const playAgainButton =document.getElementById('playAgainButton')
 const playAgainScreenContent =document.getElementById('playAgainScreenContent')
 const menuButton =document.getElementById('menuButton')
 const waitingForAnswerScreen =document.getElementById('waitingForAnswerScreen')
+const timeDisplay =document.getElementById('timeDisplay')
+
+const roundScoreForGray =document.getElementById('roundScoreForGray')
+const roundCount =document.getElementById('roundCount')
+const roundScoreForPink =document.getElementById('roundScoreForPink')
 
 newGameBtn.addEventListener('click',newGame)
 joinGameBtn.addEventListener('click',joinGame)
@@ -61,16 +67,25 @@ function handleAfterFirstAnswerForAnother(playOrNot)
     else
     {
         playAgainScreenContent.textContent = "Your fen quited the game"
+        playAgainButton.classList.add('disabled')
+        menuButton.classList.add('disabled')
         setTimeout(()=>{
             reset()
+            resetRoundScores()
             playAgainScreen.classList.add('d-none')
         },1000)
+        setTimeout(()=>{
+            alert("Your fen quited the game")
+            playAgainButton.classList.remove('disabled')
+            menuButton.classList.remove('disabled')
+        },1050)
     }
 }
 
 function handleAfterFirstAnswerForQuit()
 {
     reset()
+    resetRoundScores()
     playAgainScreen.classList.add('d-none')
 }
 
@@ -80,12 +95,15 @@ function handleAfterGame(data)
     {
         reset()
         waitingForAnswerScreen.classList.add('d-none')
-        gameCodeDisplay.textContent = data.roomName
+        gameCodeDisplay.textContent = ": " + data.roomName
+        roundCount.textContent = parseInt(roundCount.textContent)+1
+        playAgainScreenContent.textContent = "Waiting for your fen..."
         init()
     }
     else
     {
         reset()
+        resetRoundScores()
         playAgainScreen.classList.add('d-none')
         if(!waitingForAnswerScreen.classList.contains('d-none'))
         {
@@ -145,6 +163,8 @@ function paintGame(state)
 
     grayScore.textContent = "Gray: "+   `${state.players[0].score}`
     pinkScore.textContent = "Pink: "+   `${state.players[1].score}`
+
+    timeDisplay.textContent = state.time
 }
 
 function paintPlayer(playerState, size, color)
@@ -171,45 +191,81 @@ function handleGameOver(data)
     if(!gameActive)
         return
     data = JSON.parse(data)
-
-    // if(data.winner === playerNumber)
-    // {
-    //     alert('You win')
-    // }
-    // else
-    //     alert("You lose")
-    if(data.state.players[0].score>data.state.players[1].score)
+    let grayScore = parseInt(roundScoreForGray.textContent)
+    if(grayScore) grayScore++
+    else grayScore =1
+    let pinkScore = parseInt(roundScoreForPink.textContent)
+    if(pinkScore) pinkScore++
+    else pinkScore =1
+    if(data.state.time===-1)
     {
-        if(playerNumber === 1)
+        if(data.state.players[0].score>data.state.players[1].score)
         {
-            alert('Gray win')
+            if(playerNumber === 1)
+            {
+                alert('Time is up, Gray win')
+            }
+            else
+            {
+                alert('Time is up, Pink lose')
+            }
+            roundScoreForGray.textContent = grayScore;
+        }
+        else if(data.state.players[0].score===data.state.players[1].score)
+        {
+            alert('Time is up, Tie')
         }
         else
         {
-            alert('Pink lose')
+            if(playerNumber === 1)
+            {
+                alert('Time is up, Gray lose')
+            }
+            else
+            {
+                alert('Time is up, Pink win')
+            }
+            roundScoreForPink.textContent = pinkScore;
         }
-    }
-    else if(data.state.players[0].score===data.state.players[1].score)
-    {
-        alert('Tie')
     }
     else
     {
         if(playerNumber === 1)
         {
-            alert('Gray lose')
+            if(data.winner === 1)
+            {
+
+                alert('Pink hit the wall, Gray win, Pink lose')
+                roundScoreForGray.textContent = grayScore;
+            }
+            else
+            {
+                alert('You hit the wall, Gray lose, Pink win')
+                roundScoreForPink.textContent = pinkScore;
+            }
         }
         else
         {
-            alert('Pink win')
+            if(data.winner === 1)
+            {
+                alert('You hit the wall, Pink lose, Gray win')
+                roundScoreForGray.textContent = grayScore;
+            }
+            else
+            {
+                alert('Gray hit the wall, Pink win, Gray lose')
+                roundScoreForPink.textContent = pinkScore;
+            }
         }
+        
     }
+    
     playAgainScreen.classList.remove('d-none')
     gameActive=false;
 }
 function handleGameCode(gameCode)
 {
-    gameCodeDisplay.textContent = gameCode
+    gameCodeDisplay.textContent = ": " + gameCode
 }
 
 function handleUnknownCode()
@@ -261,3 +317,10 @@ function reset()
     initialScreen.classList.remove('d-none')
     initialScreen.classList.add('d-flex')
 }
+
+function resetRoundScores()
+{
+    roundScoreForGray.textContent = 0
+    roundScoreForPink.textContent = 0
+    roundCount.textContent = 1
+}   
