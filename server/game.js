@@ -57,14 +57,14 @@ function gameLoop(state){
     playerTwo.pos.y += playerTwo.vel.y;
 
 
-    if(playerOne.pos.x < 0 || playerOne.pos.x > GRID_SIZE ||
-        playerOne.pos.y < 0 || playerOne.pos.y > GRID_SIZE)
+    if(playerOne.pos.x < 0 || playerOne.pos.x >= GRID_SIZE ||
+        playerOne.pos.y < 0 || playerOne.pos.y >= GRID_SIZE)
         {
             return 2;
         }
     
-    if(playerTwo.pos.x < 0 || playerTwo.pos.x > GRID_SIZE ||
-        playerTwo.pos.y < 0 || playerTwo.pos.y > GRID_SIZE)
+    if(playerTwo.pos.x < 0 || playerTwo.pos.x >= GRID_SIZE ||
+        playerTwo.pos.y < 0 || playerTwo.pos.y >= GRID_SIZE)
         {
             return 1;
         }
