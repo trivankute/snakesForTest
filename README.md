@@ -6,7 +6,7 @@ New functions coded totally by myself to improve the experience:
   + Has 3 2 1 start.
   + Can stay at old room.
   + Can show the number of rounds you played and the number of wins of each side.
-  + After a player losed the game, will have an alert to inform to both sides.
+  + After a player lost the game, will have an alert to inform to both sides.
   + And a customized asking box for wanting to play again or not. This box is unique as it can show <br>
   to another side when the first side has accepted the playAgain invitation from the server to help the second player knows and increase <br>
   the ability to keep playing. And when a player cancel the invitation, the another one will be sent out the game too by the system,
