@@ -1,7 +1,7 @@
 # snakesForTest
 The second version of snake, just for test for the final version. It was upgraded so much from the old one from the server to the UI.
 <br>
-New functions to improve the experience:
+New functions coded totally by myself to improve the experience:
   + Has time count down now.
   + Has 3 2 1 start.
   + Can stay at old room.
